@@ -1,0 +1,2 @@
+sh.vertex.ui.engine.structure.Main -> net.minecraft.client.main.Main
+sh.vertex.ui.engine.structure.Minecraft -> dyr

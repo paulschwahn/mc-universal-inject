@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: sh.vertex.ui.injector.UniversalInjector
+Agent-Class: sh.vertex.ui.UniversalClient
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
