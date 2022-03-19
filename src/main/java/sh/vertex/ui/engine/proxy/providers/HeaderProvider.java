@@ -14,7 +14,8 @@ import sh.vertex.ui.engine.structure.Proxy;
 public class HeaderProvider extends ProxyProvider {
 
     @Override
-    public void provide(Class<? extends Proxy> proxy, ClassWriter cw, Mapping mapping) {
+    public void provide(Mapping mapping, ClassWriter cw) {
+        Class<? extends Proxy> proxy = mapping.getProxy();
         String interfaceName = proxy.getName().replace('.', '/');
 
         if (hasExtends(proxy)) {

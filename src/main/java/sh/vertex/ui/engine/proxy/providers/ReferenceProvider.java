@@ -14,7 +14,8 @@ import sh.vertex.ui.engine.structure.Proxy;
 public class ReferenceProvider extends ProxyProvider {
 
     @Override
-    public void provide(Class<? extends Proxy> proxy, ClassWriter cw, Mapping mapping) {
+    public void provide(Mapping mapping, ClassWriter cw) {
+        Class<? extends Proxy> proxy = mapping.getProxy();
         String instanceName = "instance" + proxy.getSimpleName();
         String referenceDescriptor = "L" + mapping.getInternalName() + ";";
 

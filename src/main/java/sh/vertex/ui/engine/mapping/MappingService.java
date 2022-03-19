@@ -4,17 +4,21 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.MethodGenerator;
 import sh.vertex.ui.engine.mapping.discovery.mappings.BaseDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.mappings.GuiDiscoverer;
 import sh.vertex.ui.engine.mapping.exception.MappingMissingException;
+import sh.vertex.ui.engine.mapping.exception.MappingResolveException;
 import sh.vertex.ui.engine.structure.Proxy;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MappingService {
 
@@ -30,8 +34,20 @@ public class MappingService {
     public void discoverAll() {
         this.discoverUsing(new BaseDiscoverer()); // Minecraft.class, Main.class
         this.discoverUsing(new GuiDiscoverer()); // MainWindow.class
-
         logger.info("Discovered {} total mappings", mappings.size());
+
+        this.mappings.forEach(mapping -> Stream.of(mapping.getProxy().getDeclaredMethods()).filter(m -> m.isAnnotationPresent(MethodGenerator.class)).forEach(m -> {
+            MethodGenerator gen = m.getAnnotation(MethodGenerator.class);
+            try {
+                Method match = gen.value().tryDiscover(mapping, m, gen);
+                if (match == null) throw new MappingResolveException(mapping.getProxy(), m);
+                mapping.getMappedMethods().put(m, match);
+
+                logger.info("Discovered {}#{} as {}#{} using {}", mapping.getProxy().getSimpleName(), m.getName(), mapping.getInternalClass().getSimpleName(), match.getName(), gen.value().getName());
+            } catch (Throwable t) {
+                throw new MappingResolveException(mapping.getProxy(), m, t);
+            }
+        }));
     }
 
     private void discoverUsing(MappingDiscoverer discoverer) {

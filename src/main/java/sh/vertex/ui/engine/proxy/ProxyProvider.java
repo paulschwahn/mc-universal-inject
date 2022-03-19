@@ -7,7 +7,7 @@ import sh.vertex.ui.engine.structure.Proxy;
 
 public abstract class ProxyProvider implements Opcodes {
 
-    public abstract void provide(Class<? extends Proxy> proxy, ClassWriter cw, Mapping mapping);
+    public abstract void provide(Mapping mapping, ClassWriter cw);
 
     /**
      * Check if a specific proxy has another proxy attached to it

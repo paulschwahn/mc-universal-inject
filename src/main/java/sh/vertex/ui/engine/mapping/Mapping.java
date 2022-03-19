@@ -23,10 +23,12 @@ public class Mapping {
 
     /* Mapped fields and methods */
     private final Map<String, Method> customMappings;
+    private final Map<Method, Method> mappedMethods;
 
     public Mapping(Class<? extends Proxy> proxy) {
         this.proxy = proxy;
         this.customMappings = new HashMap<>();
+        this.mappedMethods = new HashMap<>();
     }
 
     public String getInternalName() {

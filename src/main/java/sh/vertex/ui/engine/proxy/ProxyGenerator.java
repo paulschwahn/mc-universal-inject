@@ -5,6 +5,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import sh.vertex.ui.UniversalClient;
 import sh.vertex.ui.engine.mapping.Mapping;
+import sh.vertex.ui.engine.proxy.providers.GetterToGetterProvider;
 import sh.vertex.ui.engine.proxy.providers.HeaderProvider;
 import sh.vertex.ui.engine.proxy.providers.ReferenceProvider;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -32,6 +33,7 @@ public class ProxyGenerator implements Opcodes {
         Set<ProxyProvider> visited = new HashSet<>();
         providers.add(new HeaderProvider());
         providers.add(new ReferenceProvider());
+        providers.add(new GetterToGetterProvider());
 
         this.generatorProviders = new ArrayList<>();
         providers.forEach(provider -> this.resolveDependency(provider, providers, visited));
@@ -66,7 +68,7 @@ public class ProxyGenerator implements Opcodes {
     public Class<?> proxy(Class<? extends Proxy> proxy) {
         Mapping map = UniversalClient.getInstance().getMappingService().findMappingsByProxy(proxy);
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        this.generatorProviders.forEach(provider -> provider.provide(proxy, cw, map));
+        this.generatorProviders.forEach(provider -> provider.provide(map, cw));
         cw.visitEnd();
         Class<?> result = this.getProxyClassLoader().defineGlobally(cw.toByteArray());
         map.setProxyImplementation(result);

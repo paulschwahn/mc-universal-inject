@@ -55,6 +55,7 @@ public class UniversalClient {
 
         logger.info("Initialized UniversalClient");
         logger.info(EntryPoint.getMinecraft().getInternalObject());
+        logger.info("Window ID: {}", EntryPoint.getMinecraft().getWindow().getHandle());
     }
 
     private void patchMethod() throws Throwable {
