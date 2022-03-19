@@ -1,7 +1,10 @@
-package sh.vertex.ui.engine.mapping;
+package sh.vertex.ui.engine.mapping.discovery;
 
+import lombok.Getter;
 import org.objectweb.asm.Opcodes;
 import sh.vertex.ui.UniversalClient;
+import sh.vertex.ui.engine.mapping.Mapping;
+import sh.vertex.ui.engine.mapping.MappingService;
 import sh.vertex.ui.engine.mapping.exception.MappingMissingException;
 import sh.vertex.ui.engine.mapping.exception.MappingResolveException;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -14,14 +17,11 @@ import java.util.stream.Stream;
 
 public abstract class MappingDiscoverer implements Opcodes {
 
+    @Getter
     private final List<Mapping> discoveries;
 
     public MappingDiscoverer() {
         this.discoveries = new ArrayList<>();
-    }
-
-    public List<Mapping> getDiscoveries() {
-        return this.discoveries;
     }
 
     public void discover(Class<? extends Proxy> proxy, ClassProcessor... processors) {
@@ -29,6 +29,17 @@ public abstract class MappingDiscoverer implements Opcodes {
         for (ClassProcessor processor : processors) {
             try {
                 mapping.setInternalClass(processor.process());
+            } catch (Throwable e) {
+                throw new MappingResolveException(proxy, e);
+            }
+        }
+
+        if (processors.length == 0 || mapping.getInternalClass() == null) {
+            try {
+                if (proxy.isAnnotationPresent(MappingClue.class)) {
+                    MappingClue info = proxy.getAnnotation(MappingClue.class);
+                    mapping.setInternalClass(info.method().discoverClass(info));
+                }
             } catch (Throwable e) {
                 throw new MappingResolveException(proxy, e);
             }

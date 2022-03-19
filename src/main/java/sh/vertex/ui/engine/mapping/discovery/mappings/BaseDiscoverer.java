@@ -1,10 +1,10 @@
-package sh.vertex.ui.engine.mapping.discoverers;
+package sh.vertex.ui.engine.mapping.discovery.mappings;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import sh.vertex.ui.engine.mapping.Mapping;
-import sh.vertex.ui.engine.mapping.MappingDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.structure.Main;
 import sh.vertex.ui.engine.structure.Minecraft;
 import sh.vertex.util.JVMUtil;

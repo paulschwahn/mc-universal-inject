@@ -1,5 +1,7 @@
 package sh.vertex.ui;
 
+import lombok.Data;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
@@ -17,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.ProtectionDomain;
 
+@Data
 public class UniversalClient {
 
     private static final Logger logger = LogManager.getLogger();
@@ -52,18 +55,6 @@ public class UniversalClient {
 
         logger.info("Initialized UniversalClient");
         logger.info(EntryPoint.getMinecraft().getInternalObject());
-    }
-
-    public Instrumentation getInstrumentation() {
-        return this.instrumentation;
-    }
-
-    public MappingService getMappingService() {
-        return this.mappingService;
-    }
-
-    public Path getClientPath() {
-        return this.clientPath;
     }
 
     private void patchMethod() throws Throwable {

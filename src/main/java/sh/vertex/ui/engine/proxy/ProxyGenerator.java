@@ -1,5 +1,6 @@
 package sh.vertex.ui.engine.proxy;
 
+import lombok.Getter;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import sh.vertex.ui.UniversalClient;
@@ -19,6 +20,7 @@ import java.util.Set;
  */
 public class ProxyGenerator implements Opcodes {
 
+    @Getter
     private final ProxyClassLoader proxyClassLoader;
     private final List<ProxyProvider> generatorProviders;
 
@@ -53,10 +55,6 @@ public class ProxyGenerator implements Opcodes {
             this.generatorProviders.add(provider);
         } else if (!this.generatorProviders.contains(provider))
             throw new IllegalStateException("Cyclic proxy provider dependency found for " + provider.getClass().getSimpleName());
-    }
-
-    public ProxyClassLoader getProxyClassLoader() {
-        return proxyClassLoader;
     }
 
     /**
