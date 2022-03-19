@@ -6,5 +6,5 @@ import sh.vertex.ui.engine.structure.Minecraft;
 import sh.vertex.ui.engine.structure.Proxy;
 
 @MappingClue(method = DiscoveryMethod.STRING_LITERAL, isFieldOf = Minecraft.class, literals = {"Pre startup"})
-public interface MainWindow extends Proxy {
+public interface Window extends Proxy {
 }

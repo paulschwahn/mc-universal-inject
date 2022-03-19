@@ -1,12 +1,15 @@
 package sh.vertex.ui.engine.mapping.discovery;
 
+import sh.vertex.ui.engine.structure.Proxy;
+
 /**
  * "Clue" driven mapping finder
  *
  * for example: a class contains the string "Pre startup", with this clue
  * the MainWindow.class can be found.
  */
-public interface ClueDiscoverer {
+public abstract class ClueDiscoverer {
 
-    Class<?> findUsingClues(MappingClue clues) throws Throwable;
+    public abstract Class<?> findUsingClues(MappingDiscoverer discoverer, Class<? extends Proxy> proxy, MappingClue clues) throws Throwable;
+
 }

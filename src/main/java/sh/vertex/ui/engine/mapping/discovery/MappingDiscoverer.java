@@ -38,12 +38,15 @@ public abstract class MappingDiscoverer implements Opcodes {
             try {
                 if (proxy.isAnnotationPresent(MappingClue.class)) {
                     MappingClue info = proxy.getAnnotation(MappingClue.class);
-                    mapping.setInternalClass(info.method().discoverClass(info));
+                    mapping.setInternalClass(info.method().discoverClass(this, proxy, info));
                 }
             } catch (Throwable e) {
                 throw new MappingResolveException(proxy, e);
             }
         }
+
+        if (mapping.getInternalClass() == null)
+            throw new MappingResolveException(proxy);
 
         this.discoveries.add(mapping);
     }
