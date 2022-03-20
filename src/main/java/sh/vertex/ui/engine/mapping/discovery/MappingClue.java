@@ -16,7 +16,7 @@ public @interface MappingClue {
 
     Class<? extends Proxy> isFieldOf() default Proxy.class;
     String[] literals() default {};
-    float floatConstant() default Float.NaN;
+    float[] floatConstants() default {};
 
     Class<? extends Proxy> oldestAncestor() default Proxy.class;
 

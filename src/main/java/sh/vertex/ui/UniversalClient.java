@@ -51,7 +51,7 @@ public class UniversalClient {
         this.mappingService.dump(this.clientPath.resolve("mappings.txt"));
 
         this.proxyGenerator = new ProxyGenerator();
-        this.mappingService.getMappings().forEach(mapping -> this.proxyGenerator.proxy(mapping.getProxy()));
+        this.proxyGenerator.buildProxies(this.mappingService.getMappings());
 
         logger.info("Initialized UniversalClient");
         logger.info(EntryPoint.getMinecraft().getInternalObject());

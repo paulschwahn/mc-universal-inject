@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MethodGenerator;
 import sh.vertex.ui.engine.mapping.discovery.mappings.BaseDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.mappings.EntityDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.mappings.GuiDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.mappings.UtilDiscoverer;
 import sh.vertex.ui.engine.mapping.exception.MappingMissingException;
@@ -34,8 +35,9 @@ public class MappingService {
 
     public void discoverAll() {
         this.discoverUsing(new BaseDiscoverer()); // Minecraft.class, Main.class
-        this.discoverUsing(new GuiDiscoverer()); // MainWindow.class
+        this.discoverUsing(new GuiDiscoverer()); // MainWindow.class, Screen.class
         this.discoverUsing(new UtilDiscoverer()); // Session.class
+        this.discoverUsing(new EntityDiscoverer()); // Entity.class, ClientPlayerEntity.class
         logger.info("Discovered {} total mappings", mappings.size());
 
         this.mappings.forEach(mapping -> Stream.of(mapping.getProxy().getDeclaredMethods()).filter(m -> m.isAnnotationPresent(MethodGenerator.class)).forEach(m -> {

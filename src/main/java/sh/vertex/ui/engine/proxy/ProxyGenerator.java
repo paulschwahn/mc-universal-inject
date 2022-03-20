@@ -5,7 +5,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import sh.vertex.ui.UniversalClient;
 import sh.vertex.ui.engine.mapping.Mapping;
-import sh.vertex.ui.engine.proxy.providers.GetterToGetterProvider;
+import sh.vertex.ui.engine.proxy.providers.MethodProvider;
 import sh.vertex.ui.engine.proxy.providers.HeaderProvider;
 import sh.vertex.ui.engine.proxy.providers.ReferenceProvider;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -33,7 +33,7 @@ public class ProxyGenerator implements Opcodes {
         Set<ProxyProvider> visited = new HashSet<>();
         providers.add(new HeaderProvider());
         providers.add(new ReferenceProvider());
-        providers.add(new GetterToGetterProvider());
+        providers.add(new MethodProvider());
 
         this.generatorProviders = new ArrayList<>();
         providers.forEach(provider -> this.resolveDependency(provider, providers, visited));
@@ -73,5 +73,25 @@ public class ProxyGenerator implements Opcodes {
         Class<?> result = this.getProxyClassLoader().defineGlobally(cw.toByteArray());
         map.setProxyImplementation(result);
         return result;
+    }
+
+    public void buildProxies(List<Mapping> mappings) {
+        Set<Class<? extends Proxy>> visited = new HashSet<>();
+        List<Class<? extends Proxy>> result = new ArrayList<>();
+        mappings.forEach(mapping -> resolveDependency(mapping.getProxy(), result, visited));
+        result.forEach(this::proxy);
+    }
+
+    private void resolveDependency(Class<? extends Proxy> proxy, List<Class<? extends Proxy>> result, Set<Class<? extends Proxy>> visited) {
+        if (!visited.contains(proxy)) {
+            visited.add(proxy);
+
+            if (proxy.getInterfaces().length == 1 && proxy.getInterfaces()[0] != Proxy.class && Proxy.class.isAssignableFrom(proxy.getInterfaces()[0])) {
+                this.resolveDependency(proxy.getInterfaces()[0].asSubclass(Proxy.class), result, visited);
+            }
+
+            result.add(proxy);
+        } else if (!result.contains(proxy))
+            throw new IllegalStateException("Cyclic proxy interface found for " + proxy.getSimpleName());
     }
 }

@@ -13,4 +13,11 @@ public abstract class MethodDiscoverer {
     public Mapping findMappingsByProxy(Class<? extends Proxy> proxy) {
         return UniversalClient.getInstance().getMappingService().findMappingsByProxy(proxy);
     }
+
+    public Class<?> resolve(Class<?> check) {
+        if (Proxy.class.isAssignableFrom(check)) {
+            return findMappingsByProxy(check.asSubclass(Proxy.class)).getInternalClass();
+        }
+        return check;
+    }
 }
