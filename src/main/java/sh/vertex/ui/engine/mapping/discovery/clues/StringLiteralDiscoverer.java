@@ -1,9 +1,8 @@
 package sh.vertex.ui.engine.mapping.discovery.clues;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.tree.*;
 import sh.vertex.ui.engine.mapping.discovery.ClueDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MappingClue;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
@@ -14,6 +13,8 @@ import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
 public class StringLiteralDiscoverer extends ClueDiscoverer {
+
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public Class<?> findUsingClues(MappingDiscoverer discoverer, Class<? extends Proxy> proxy, MappingClue clues) {
@@ -32,8 +33,8 @@ public class StringLiteralDiscoverer extends ClueDiscoverer {
                         int streak = 0;
 
                         for (AbstractInsnNode insn : node.instructions) {
-                            if (insn.getType() == AbstractInsnNode.LDC_INSN && insn instanceof LdcInsnNode) {
-                                Object valObj = ((LdcInsnNode) insn).cst;
+                            if (insn.getType() == AbstractInsnNode.LDC_INSN && insn instanceof LdcInsnNode ldc) {
+                                Object valObj = ldc.cst;
                                 if (valObj instanceof String val) {
                                     if (val.equals(literals[streak]))
                                         streak++;
@@ -42,6 +43,22 @@ public class StringLiteralDiscoverer extends ClueDiscoverer {
 
                                     if (streak == literals.length) {
                                         return true;
+                                    }
+                                }
+                            } else if (insn.getType() == AbstractInsnNode.INVOKE_DYNAMIC_INSN && insn instanceof InvokeDynamicInsnNode indy) {
+                                if (indy.name.equals("makeConcatWithConstants") && indy.bsmArgs.length == 1) {
+                                    Object bsmArg = indy.bsmArgs[0];
+                                    if (bsmArg instanceof String arg) {
+                                        for (String str : arg.split("\u0001")) {
+                                            if (str.equals(literals[streak]))
+                                                streak++;
+                                            else
+                                                streak = 0;
+
+                                            if (streak == literals.length) {
+                                                return true;
+                                            }
+                                        }
                                     }
                                 }
                             }

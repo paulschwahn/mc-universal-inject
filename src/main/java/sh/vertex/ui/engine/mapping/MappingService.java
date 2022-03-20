@@ -7,6 +7,7 @@ import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MethodGenerator;
 import sh.vertex.ui.engine.mapping.discovery.mappings.BaseDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.mappings.GuiDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.mappings.UtilDiscoverer;
 import sh.vertex.ui.engine.mapping.exception.MappingMissingException;
 import sh.vertex.ui.engine.mapping.exception.MappingResolveException;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -34,6 +35,7 @@ public class MappingService {
     public void discoverAll() {
         this.discoverUsing(new BaseDiscoverer()); // Minecraft.class, Main.class
         this.discoverUsing(new GuiDiscoverer()); // MainWindow.class
+        this.discoverUsing(new UtilDiscoverer()); // Session.class
         logger.info("Discovered {} total mappings", mappings.size());
 
         this.mappings.forEach(mapping -> Stream.of(mapping.getProxy().getDeclaredMethods()).filter(m -> m.isAnnotationPresent(MethodGenerator.class)).forEach(m -> {
