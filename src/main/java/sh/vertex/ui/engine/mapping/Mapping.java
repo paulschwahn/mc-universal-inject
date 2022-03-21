@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import sh.vertex.ui.engine.structure.Proxy;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +25,13 @@ public class Mapping {
     /* Mapped fields and methods */
     private final Map<String, Method> customMappings;
     private final Map<Method, Method> mappedMethods;
+    private final Map<Method, Field> mappedFields;
 
     public Mapping(Class<? extends Proxy> proxy) {
         this.proxy = proxy;
         this.customMappings = new HashMap<>();
         this.mappedMethods = new HashMap<>();
+        this.mappedFields = new HashMap<>();
     }
 
     public String getInternalName() {

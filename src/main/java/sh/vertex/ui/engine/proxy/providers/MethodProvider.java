@@ -10,7 +10,7 @@ import sh.vertex.ui.engine.proxy.DependsOn;
 import sh.vertex.ui.engine.proxy.ProxyProvider;
 import sh.vertex.ui.engine.structure.Proxy;
 
-@DependsOn(HeaderProvider.class)
+@DependsOn(ReferenceProvider.class)
 public class MethodProvider extends ProxyProvider {
 
     @Override

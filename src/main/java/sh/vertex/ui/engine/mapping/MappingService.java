@@ -14,6 +14,8 @@ import sh.vertex.ui.engine.mapping.exception.MappingResolveException;
 import sh.vertex.ui.engine.structure.Proxy;
 
 import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,11 +45,15 @@ public class MappingService {
         this.mappings.forEach(mapping -> Stream.of(mapping.getProxy().getDeclaredMethods()).filter(m -> m.isAnnotationPresent(MethodGenerator.class)).forEach(m -> {
             MethodGenerator gen = m.getAnnotation(MethodGenerator.class);
             try {
-                Method match = gen.value().tryDiscover(mapping, m, gen);
+                AccessibleObject match = gen.value().tryDiscover(mapping, m, gen);
                 if (match == null) throw new MappingResolveException(mapping.getProxy(), m);
-                mapping.getMappedMethods().put(m, match);
-
-                logger.info("Discovered {}#{} as {}#{} using {}", mapping.getProxy().getSimpleName(), m.getName(), mapping.getInternalClass().getSimpleName(), match.getName(), gen.value().getName());
+                if (match instanceof Method method) {
+                    mapping.getMappedMethods().put(m, method);
+                    logger.info("Discovered method {}#{} as {}#{} using {}", mapping.getProxy().getSimpleName(), m.getName(), mapping.getInternalClass().getSimpleName(), method.getName(), gen.value().getName());
+                } else if (match instanceof Field field) {
+                    mapping.getMappedFields().put(m, field);
+                    logger.info("Discovered field {}#{} as {}#{} using {}", mapping.getProxy().getSimpleName(), m.getName(), mapping.getInternalClass().getSimpleName(), field.getName(), gen.value().getName());
+                }
             } catch (Throwable t) {
                 throw new MappingResolveException(mapping.getProxy(), m, t);
             }

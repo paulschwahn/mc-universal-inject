@@ -4,10 +4,9 @@ import lombok.Getter;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import sh.vertex.ui.UniversalClient;
+import sh.vertex.ui.engine.detour.impl.ChatMessageDetour;
 import sh.vertex.ui.engine.mapping.Mapping;
-import sh.vertex.ui.engine.proxy.providers.MethodProvider;
-import sh.vertex.ui.engine.proxy.providers.HeaderProvider;
-import sh.vertex.ui.engine.proxy.providers.ReferenceProvider;
+import sh.vertex.ui.engine.proxy.providers.*;
 import sh.vertex.ui.engine.structure.Proxy;
 
 import java.net.URL;
@@ -34,6 +33,8 @@ public class ProxyGenerator implements Opcodes {
         providers.add(new HeaderProvider());
         providers.add(new ReferenceProvider());
         providers.add(new MethodProvider());
+        providers.add(new FieldGetterProvider());
+        providers.add(new FieldSetterProvider());
 
         this.generatorProviders = new ArrayList<>();
         providers.forEach(provider -> this.resolveDependency(provider, providers, visited));

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import sh.vertex.ui.engine.detour.DetourManager;
+import sh.vertex.ui.engine.detour.impl.ChatMessageDetour;
 import sh.vertex.ui.engine.detour.impl.SetTitleDetour;
 import sh.vertex.ui.engine.mapping.MappingService;
 import sh.vertex.ui.engine.proxy.ProxyGenerator;
@@ -65,6 +66,15 @@ public class UniversalClient {
         logger.info("Username: {}", EntryPoint.getMinecraft().getSession().getProfile().getName());
 
         this.detourManager.register(this);
+    }
+
+    public void onChat(ChatMessageDetour detour) {
+        logger.info("chatting " + detour.getMessage());
+
+        if (detour.getMessage().startsWith(".xd")) {
+            EntryPoint.getMinecraft().getPlayer().chat("chat extra");
+            detour.setCanceled(true);
+        }
     }
 
     private void patchMethod() throws Throwable {
