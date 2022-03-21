@@ -7,9 +7,9 @@ import sh.vertex.ui.engine.structure.util.Session;
 
 public interface Minecraft extends Proxy {
 
-    @MethodGenerator(PopulationMethod.GETTER_CALL)
+    @MethodGenerator(PopulationMethod.METHOD_BY_DESCRIPTOR)
     Window getWindow();
 
-    @MethodGenerator(PopulationMethod.GETTER_CALL)
+    @MethodGenerator(PopulationMethod.METHOD_BY_DESCRIPTOR)
     Session getSession();
 }

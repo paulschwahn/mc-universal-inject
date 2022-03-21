@@ -35,4 +35,7 @@ public class Mapping {
         return this.getInternalClass().getName().replace('.', '/');
     }
 
+    public String getGeneratedProxy() {
+        return "sh/vertex/ui/engine/proxy/proxies/" + this.proxy.getSimpleName() + "Proxy";
+    }
 }

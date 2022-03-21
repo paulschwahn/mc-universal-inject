@@ -5,10 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JVMUtil {
+public class JVMUtil implements Opcodes {
 
     private static final Logger logger = LogManager.getLogger();
     private static final Map<String, ClassNode> NODE_CACHE = new HashMap<>();
@@ -119,6 +116,35 @@ public class JVMUtil {
         }
 
         return match == null ? null : (T) match;
+    }
+
+    public static boolean containsOpcodes(Method method, int[] opcodes) {
+        if (opcodes.length == 0) return true;
+        var node = getClassNode(method.getDeclaringClass());
+        var mn = getMethod(node, method.getName(), Type.getMethodDescriptor(method));
+        assert mn != null;
+        return findInsn(mn.instructions, SearchTechnique.FIRST, 0, opcodes) != null;
+    }
+
+    public static String asmify(String name) {
+        return name.replace('.', '/');
+    }
+
+    public static int getFirstFreeStackIndex(MethodNode node) {
+        var max = 0;
+        var isBigInsn = false;
+        var currentInsn = node.instructions.getFirst();
+        while (currentInsn != null) {
+            if (currentInsn instanceof VarInsnNode val) {
+                if (val.var > max) {
+                    max = val.var;
+                    var c = val.getOpcode();
+                    isBigInsn = c == FLOAD || c == DLOAD || c == FSTORE || c == DSTORE;
+                }
+            }
+            currentInsn = currentInsn.getNext();
+        }
+        return max + (isBigInsn ? 2 : 1);
     }
 
     public enum SearchTechnique {

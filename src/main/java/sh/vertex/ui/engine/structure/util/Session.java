@@ -11,6 +11,6 @@ import sh.vertex.ui.engine.structure.Proxy;
 @MappingClue(method = DiscoveryMethod.STRING_LITERAL, isFieldOf = Minecraft.class, literals = "token:")
 public interface Session extends Proxy {
 
-    @MethodGenerator(PopulationMethod.GETTER_CALL)
+    @MethodGenerator(PopulationMethod.METHOD_BY_DESCRIPTOR)
     GameProfile getProfile();
 }

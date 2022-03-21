@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import sh.vertex.ui.engine.detour.DetourManager;
+import sh.vertex.ui.engine.detour.impl.SetTitleDetour;
 import sh.vertex.ui.engine.mapping.MappingService;
 import sh.vertex.ui.engine.proxy.ProxyGenerator;
 import sh.vertex.util.MethodVisitorNode;
@@ -37,6 +39,7 @@ public class UniversalClient {
     private final Instrumentation instrumentation;
     private final MappingService mappingService;
     private final ProxyGenerator proxyGenerator;
+    private final DetourManager detourManager;
     private final Path clientPath;
 
     public UniversalClient(Instrumentation instrumentation, String arguments) throws Throwable {
@@ -53,10 +56,15 @@ public class UniversalClient {
         this.proxyGenerator = new ProxyGenerator();
         this.proxyGenerator.buildProxies(this.mappingService.getMappings());
 
+        this.detourManager = new DetourManager(this.instrumentation);
+        this.detourManager.hookDetours(this.mappingService.getMappings());
+
         logger.info("Initialized UniversalClient");
         logger.info(EntryPoint.getMinecraft().getInternalObject());
         logger.info("Window ID: {}", EntryPoint.getMinecraft().getWindow().getHandle());
         logger.info("Username: {}", EntryPoint.getMinecraft().getSession().getProfile().getName());
+
+        this.detourManager.register(this);
     }
 
     private void patchMethod() throws Throwable {

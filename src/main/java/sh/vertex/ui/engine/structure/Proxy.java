@@ -1,6 +1,8 @@
 package sh.vertex.ui.engine.structure;
 
-public interface Proxy {
+import org.objectweb.asm.Opcodes;
+
+public interface Proxy extends Opcodes {
 
     Object getInternalObject();
 }

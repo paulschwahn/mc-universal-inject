@@ -3,6 +3,7 @@ package sh.vertex.ui.engine.mapping.discovery.methods;
 import sh.vertex.ui.engine.mapping.Mapping;
 import sh.vertex.ui.engine.mapping.discovery.MethodDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MethodGenerator;
+import sh.vertex.util.JVMUtil;
 
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
@@ -20,7 +21,7 @@ public class DescriptorDiscoverer extends MethodDiscoverer {
                         if (m.getParameterTypes()[i] != resolve(proxyMethod.getParameterTypes()[i]))
                             return false;
 
-                    return true;
+                    return JVMUtil.containsOpcodes(m, generator.opcodes());
                 })
                 .findAny().orElse(null);
     }

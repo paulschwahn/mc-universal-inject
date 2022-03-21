@@ -1,6 +1,4 @@
-package sh.vertex.ui.engine.mapping.discovery;
-
-import sh.vertex.ui.engine.mapping.PopulationMethod;
+package sh.vertex.ui.engine.detour.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,9 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface MethodGenerator {
+public @interface DetourFieldInjection {
 
-    PopulationMethod value();
-
-    int[] opcodes() default {};
+    int value();
 }
