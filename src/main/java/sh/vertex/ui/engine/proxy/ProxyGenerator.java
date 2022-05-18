@@ -16,7 +16,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Dynamic proxy class generator given a simple interface
+ * <p>Dynamic proxy class generator given a simple interface, uses multiple proxy population providers
+ * implementing the {@link ProxyProvider} Interface.</p>
+ *
+ * <p>Providers can be sorted by using the {@link DependsOn} Annotation, building a dependency tree
+ * and generating the different parts one by one.</p>
+ *
+ * @author Paul Schwahn
+ * @since 19.03.2022
  */
 public class ProxyGenerator implements Opcodes {
 

@@ -10,6 +10,16 @@ import sh.vertex.ui.engine.proxy.DependsOn;
 import sh.vertex.ui.engine.proxy.ProxyProvider;
 import sh.vertex.ui.engine.structure.Proxy;
 
+
+/**
+ * <p>Provides all kinds of methods to a given proxy, every getter, setter or regular method call,
+ * any return type or parameter will get properly converted by this Provider</p>
+ *
+ * <p>Automatically resolves proxy classes,</p>
+ *
+ * @author Paul Schwahn
+ * @since 20.03.2022
+ */
 @DependsOn(ReferenceProvider.class)
 public class MethodProvider extends ProxyProvider {
 

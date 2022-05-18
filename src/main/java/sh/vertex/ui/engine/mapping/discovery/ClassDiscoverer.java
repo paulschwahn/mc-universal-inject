@@ -8,7 +8,7 @@ import sh.vertex.ui.engine.structure.Proxy;
  * for example: a class contains the string "Pre startup", with this clue
  * the MainWindow.class can be found.
  */
-public abstract class ClueDiscoverer {
+public abstract class ClassDiscoverer {
 
     public abstract Class<?> findUsingClues(MappingDiscoverer discoverer, Class<? extends Proxy> proxy, MappingClue clues) throws Throwable;
 

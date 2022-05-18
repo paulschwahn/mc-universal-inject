@@ -19,6 +19,12 @@ public abstract class ProxyProvider implements Opcodes {
         return proxy.getInterfaces().length >= 1 && !proxy.getInterfaces()[0].equals(Proxy.class);
     }
 
+    /**
+     * Returns the proxy location inside the current classpath.
+     *
+     * @param proxy Proxy class
+     * @return ow2-asm style string representation of the proxy implementation
+     */
     protected String getProxiedName(Class<? extends Proxy> proxy) {
         return "sh/vertex/ui/engine/proxy/proxies/" + proxy.getSimpleName() + "Proxy";
     }

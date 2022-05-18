@@ -10,6 +10,39 @@ import sh.vertex.ui.engine.proxy.DependsOn;
 import sh.vertex.ui.engine.proxy.ProxyProvider;
 import sh.vertex.ui.engine.structure.Proxy;
 
+/**
+ * Generates all specified field setters for a specific proxy
+ *
+ * <p><b>Requirements:</b></p>
+ * <ul>
+ *     <li>Method has to have exactly one argument</li>
+ *     <li>Return type has to be void</li>
+ * </ul>
+ *
+ * <p>Generates opcode representing a setter:</p>
+ * <pre>
+ *     {@code
+ *          L1:
+ *              aload0
+ *              getfield [Proxy] instance[ProxyName] L[Proxy];
+ *              (if setting a proxied value)    invokevirtual [Proxy] get[ProxyName]Instance
+ *              putfield [Internal] [internalFieldName] [internalFieldDescriptor]
+ *          L2:
+ *              return
+ *     }
+ * </pre>
+ * <p>Example for generating a setter:</p>
+ * <pre>
+ *     {@code
+ *          @MethodGenerator(PopulationMethod.FIELD)
+ *          void setTitle(String title);
+ *     }
+ * </pre>
+ *
+ * @see sh.vertex.ui.engine.mapping.discovery.methods.FieldDiscoverer
+ * @author Paul Schwahn
+ * @since 21.03.2022
+ */
 @DependsOn(ReferenceProvider.class)
 public class FieldSetterProvider extends ProxyProvider {
 
@@ -31,6 +64,8 @@ public class FieldSetterProvider extends ProxyProvider {
                     insn.add(new MethodInsnNode(INVOKEVIRTUAL, getProxiedName(param.getProxy()), "get" + param.getProxy().getSimpleName() + "Instance", Type.getMethodDescriptor(Type.getType(param.getInternalClass()))));
                 }
                 insn.add(new FieldInsnNode(PUTFIELD, mapping.getInternalName(), internal.getName(), Type.getDescriptor(internal.getType())));
+                insn.add(new LabelNode());
+                insn.add(new InsnNode(RETURN));
                 insn.accept(mv);
                 mv.visitMaxs(0, 0);
             }

@@ -1,12 +1,12 @@
-package sh.vertex.ui.engine.mapping.discovery.clues;
+package sh.vertex.ui.engine.mapping.discovery.classes;
 
 import sh.vertex.ui.engine.mapping.Mapping;
-import sh.vertex.ui.engine.mapping.discovery.ClueDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.ClassDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MappingClue;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.structure.Proxy;
 
-public class OldestAncestorDiscoverer extends ClueDiscoverer {
+public class OldestAncestorDiscoverer extends ClassDiscoverer {
 
     @Override
     public Class<?> findUsingClues(MappingDiscoverer discoverer, Class<? extends Proxy> proxy, MappingClue clues) {

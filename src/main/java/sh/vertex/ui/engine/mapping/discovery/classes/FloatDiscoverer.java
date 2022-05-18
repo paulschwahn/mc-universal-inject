@@ -1,7 +1,7 @@
-package sh.vertex.ui.engine.mapping.discovery.clues;
+package sh.vertex.ui.engine.mapping.discovery.classes;
 
 import org.objectweb.asm.tree.*;
-import sh.vertex.ui.engine.mapping.discovery.ClueDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.ClassDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MappingClue;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -10,7 +10,7 @@ import sh.vertex.util.JVMUtil;
 import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
-public class FloatDiscoverer extends ClueDiscoverer {
+public class FloatDiscoverer extends ClassDiscoverer {
 
     @Override
     public Class<?> findUsingClues(MappingDiscoverer discoverer, Class<? extends Proxy> proxy, MappingClue clues) {

@@ -10,6 +10,40 @@ import sh.vertex.ui.engine.proxy.ProxyProvider;
 import sh.vertex.ui.engine.structure.Proxy;
 import sh.vertex.util.JVMUtil;
 
+/**
+ * Generates all specified field setters for a specific proxy
+ *
+ * <p><b>Requirements:</b></p>
+ * <ul>
+ *     <li>Method has to have no arguments</li>
+ *     <li>Return type has to be the desired field type (Or a proxied version of it)</li>
+ * </ul>
+ *
+ * <p>Generates opcode representing a getter:</p>
+ * <pre>
+ *     {@code
+ *          L1:
+ *              (if getting a proxied value) new [ProxyImplementation]
+ *              (if getting a proxied value) dup
+ *              aload0
+ *              getfield [Proxy] instance[ProxyName] L[Proxy];
+ *              getfield [Internal] [internalFieldName] [internalFieldDescriptor]
+ *              (if getting a proxied value) invokespecial [ProxyImplementation] <init>
+ *              areturn
+ *     }
+ * </pre>
+ * <p>Example for generating a getter:</p>
+ * <pre>
+ *     {@code
+ *          @MethodGenerator(PopulationMethod.FIELD)
+ *          String getTitle();
+ *     }
+ * </pre>
+ *
+ * @see sh.vertex.ui.engine.mapping.discovery.methods.FieldDiscoverer
+ * @author Paul Schwahn
+ * @since 21.03.2022
+ */
 @DependsOn(ReferenceProvider.class)
 public class FieldGetterProvider extends ProxyProvider {
 

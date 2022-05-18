@@ -7,9 +7,14 @@ import sh.vertex.ui.engine.structure.Proxy;
 
 /**
  * Generates the class header with information like:
- *  1. Class-Version
- *  2. Possible Super Classes
- *  3. Proxy Metadata
+ * <ol>
+ *     <li>Class-Version</li>
+ *     <li>Possible Super Classes (Other proxies)</li>
+ *     <li>Proxy Metadata</li>
+ * </ol>
+ *
+ * @author Paul Schwahn
+ * @since 19.03.2022
  */
 public class HeaderProvider extends ProxyProvider {
 

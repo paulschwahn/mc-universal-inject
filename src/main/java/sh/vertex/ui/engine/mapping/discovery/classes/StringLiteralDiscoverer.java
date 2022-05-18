@@ -1,9 +1,9 @@
-package sh.vertex.ui.engine.mapping.discovery.clues;
+package sh.vertex.ui.engine.mapping.discovery.classes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.*;
-import sh.vertex.ui.engine.mapping.discovery.ClueDiscoverer;
+import sh.vertex.ui.engine.mapping.discovery.ClassDiscoverer;
 import sh.vertex.ui.engine.mapping.discovery.MappingClue;
 import sh.vertex.ui.engine.mapping.discovery.MappingDiscoverer;
 import sh.vertex.ui.engine.structure.Proxy;
@@ -12,7 +12,7 @@ import sh.vertex.util.JVMUtil;
 import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
-public class StringLiteralDiscoverer extends ClueDiscoverer {
+public class StringLiteralDiscoverer extends ClassDiscoverer {
 
     private static final Logger logger = LogManager.getLogger();
 
