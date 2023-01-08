@@ -1,7 +1,7 @@
 sh.vertex.ui.engine.structure.Main -> net.minecraft.client.main.Main
-sh.vertex.ui.engine.structure.Minecraft -> dyr
-sh.vertex.ui.engine.structure.gui.Window -> dsr
-sh.vertex.ui.engine.structure.gui.Screen -> edw
-sh.vertex.ui.engine.structure.util.Session -> dzh
-sh.vertex.ui.engine.structure.entity.ClientPlayerEntity -> epw
-sh.vertex.ui.engine.structure.entity.Entity -> axk
+sh.vertex.ui.engine.structure.Minecraft -> eeu
+sh.vertex.ui.engine.structure.gui.Window -> dyw
+sh.vertex.ui.engine.structure.gui.Screen -> eki
+sh.vertex.ui.engine.structure.util.Session -> efk
+sh.vertex.ui.engine.structure.entity.ClientPlayerEntity -> ewx
+sh.vertex.ui.engine.structure.entity.Entity -> baq

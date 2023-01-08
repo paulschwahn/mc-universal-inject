@@ -9,19 +9,14 @@ import sh.vertex.ui.engine.mapping.discovery.MappingClue;
 import sh.vertex.ui.engine.mapping.discovery.MethodGenerator;
 import sh.vertex.ui.engine.structure.Minecraft;
 
-import java.lang.invoke.MethodType;
-
 @MappingClue(method = DiscoveryMethod.FLOAT, isFieldOf = Minecraft.class, floatConstants = 0.006666667f)
 public interface ClientPlayerEntity extends Entity {
 
     @DetourHook(detour = ChatMessageDetour.class, location = DetourLocation.FIRST)
     @MethodGenerator(value = PopulationMethod.METHOD_BY_DESCRIPTOR, opcodes = {
             ALOAD,
-            GETFIELD,
-            NEW,
-            DUP,
             ALOAD,
-            INVOKESPECIAL,
+            ACONST_NULL,
             INVOKEVIRTUAL
     })
     void chat(String message);

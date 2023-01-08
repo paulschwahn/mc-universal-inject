@@ -1,7 +1,6 @@
 package sh.vertex.ui;
 
 import lombok.Data;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
@@ -13,9 +12,7 @@ import sh.vertex.ui.engine.mapping.MappingService;
 import sh.vertex.ui.engine.proxy.ProxyGenerator;
 import sh.vertex.util.MethodVisitorNode;
 
-import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
@@ -69,12 +66,16 @@ public class UniversalClient {
     }
 
     public void onChat(ChatMessageDetour detour) {
-        logger.info("chatting " + detour.getMessage());
+        logger.info("chatting {}", detour.getMessage());
 
         if (detour.getMessage().startsWith(".xd")) {
             EntryPoint.getMinecraft().getPlayer().chat("chat extra");
             detour.setCanceled(true);
         }
+    }
+
+    public void onTitle(SetTitleDetour detour) {
+        detour.setTitle("injected " + detour.getTitle());
     }
 
     private void patchMethod() throws Throwable {
